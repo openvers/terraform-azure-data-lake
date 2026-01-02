@@ -33,6 +33,11 @@ output "bronze_bucket_container_name" {
   value       = module.bronze_bucket.bucket_container_name
 }
 
+output "bronze_bucket_key" {
+  description = "Azure Medallion Bronze Storage Bucket Key"
+  value       = module.bronze_bucket.bucket_key
+}
+
 output "silver_bucket_id" {
   description = "Azure Medallion Silver Storage Bucket ID"
   value       = module.silver_bucket.bucket_id
@@ -53,6 +58,11 @@ output "silver_bucket_container_name" {
   value       = module.silver_bucket.bucket_container_name
 }
 
+output "silver_bucket_key" {
+  description = "Azure Medallion Silver Storage Bucket Key"
+  value       = module.silver_bucket.bucket_key
+}
+
 output "gold_bucket_id" {
   description = "Azure Medallion Gold Storage Bucket ID"
   value       = module.gold_bucket.bucket_id
@@ -71,4 +81,9 @@ output "gold_bucket_container_id" {
 output "gold_bucket_container_name" {
   description = "Azure Medallion Gold Storage Bucket Container Name"
   value       = module.gold_bucket.bucket_container_name
+}
+
+output "gold_bucket_key" {
+  description = "Azure Medallion Gold Storage Bucket Key"
+  value       = module.gold_bucket.bucket_key
 }
