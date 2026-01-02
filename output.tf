@@ -8,6 +8,11 @@ output "azure_key_vault_uri" {
   value       = module.azure_key_vault.key_vault_uri
 }
 
+output "azure_key_vault_key" {
+  description = "Azure Key Vault Key"
+  value       = module.azure_key_vault.key_vault_key
+}
+
 output "bronze_bucket_id" {
   description = "Azure Medallion Bronze Storage Bucket ID"
   value       = module.bronze_bucket.bucket_id
