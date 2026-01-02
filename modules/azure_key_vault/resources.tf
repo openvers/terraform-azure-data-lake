@@ -11,6 +11,9 @@ terraform {
 
 data "azurerm_client_config" "this" {}
 
+data "azurerm_resource_group" "this" {
+  name = var.resource_group_name
+}
 
 ## ---------------------------------------------------------------------------------------------------------------------
 ## AZURE KEY VAULT RESOURCE
@@ -30,8 +33,8 @@ resource "azurerm_key_vault" "this" {
   provider = azurerm.auth_session
 
   name                        = replace(substr(var.key_vault_name, 0, 24), "/-$/", "")
-  resource_group_name         = var.resource_group_name
-  location                    = var.resource_group_location
+  resource_group_name         = data.azurerm_resource_group.this.name
+  location                    = data.azurerm_resource_group.this.location
   tenant_id                   = data.azurerm_client_config.this.tenant_id
   sku_name                    = var.sku_name
   enabled_for_disk_encryption = var.enable_for_disk_encryption

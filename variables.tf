@@ -8,11 +8,6 @@ variable "resource_group_name" {
   description = "Azure Resouce Group Name"
 }
 
-variable "resource_group_location" {
-  type        = string
-  description = "Azure Resouce Group Location"
-}
-
 variable "security_group_id" {
   type        = string
   description = "Microsoft Entra Security Group ID"

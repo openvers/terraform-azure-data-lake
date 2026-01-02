@@ -11,6 +11,10 @@ terraform {
 
 data "azurerm_client_config" "this" {}
 
+data "azurerm_resource_group" "this" {
+  name = var.resource_group_name
+}
+
 
 ## ---------------------------------------------------------------------------------------------------------------------
 ## AZURE STORAGE ACCOUNT RESOURCE
@@ -31,8 +35,8 @@ resource "azurerm_storage_account" "this" {
   provider = azurerm.auth_session
 
   name                     = replace(substr(var.bucket_name, 0, 24), "/-/", "")
-  resource_group_name      = var.resource_group_name
-  location                 = var.resource_group_location
+  resource_group_name      = data.azurerm_resource_group.this.name
+  location                 = data.azurerm_resource_group.this.location
   account_kind             = var.azure_storage_account_kind
   account_tier             = "Premium"
   account_replication_type = "LRS"
