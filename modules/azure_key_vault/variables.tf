@@ -3,11 +3,6 @@
 ## These variables are expected to be passed in by the operator
 ## ---------------------------------------------------------------------------------------------------------------------
 
-variable "resource_group_location" {
-  type        = string
-  description = "Azure Resouce Group Location"
-}
-
 variable "resource_group_name" {
   type        = string
   description = "Azure Resouce Group Name"

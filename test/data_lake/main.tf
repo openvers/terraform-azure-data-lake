@@ -107,7 +107,6 @@ module "data_lake" {
   key_vault_name             = "${replace(local.suffix, " ", "-")}-datalake-akv"
   security_group_id          = var.SECURITY_GROUP_ID
   resource_group_name        = azurerm_resource_group.this.name
-  resource_group_location    = azurerm_resource_group.this.location
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
