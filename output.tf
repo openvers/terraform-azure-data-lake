@@ -10,7 +10,7 @@ output "azure_key_vault_uri" {
 
 output "azure_key_vault_key" {
   description = "Azure Key Vault Key"
-  value       = module.azure_key_vault.key_vault_key
+  value       = module.azure_key_vault.key_vault_key_name
 }
 
 output "bronze_bucket_id" {
