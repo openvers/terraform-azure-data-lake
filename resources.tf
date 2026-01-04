@@ -52,13 +52,15 @@ data "azurerm_client_config" "current" {}
 module "bronze_bucket" {
   source = "./modules/adls_bucket"
 
-  resource_group_name        = data.azurerm_resource_group.this.name
-  security_group_id          = var.security_group_id
-  azure_storage_account_kind = var.azure_storage_account_kind
-  bucket_name                = var.bronze_bucket_name
-  container_name             = "${var.bronze_bucket_name}-container"
-  key_vault_id               = module.azure_key_vault.key_vault_id
-  key_name                   = module.azure_key_vault.key_name
+  resource_group_name                    = data.azurerm_resource_group.this.name
+  security_group_id                      = var.security_group_id
+  azure_storage_account_kind             = var.azure_storage_account_kind
+  azure_storage_account_tier             = var.azure_storage_account_tier
+  azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  bucket_name                            = var.bronze_bucket_name
+  container_name                         = "${var.bronze_bucket_name}-container"
+  key_vault_id                           = module.azure_key_vault.key_vault_id
+  key_name                               = module.azure_key_vault.key_name
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
@@ -81,13 +83,15 @@ module "bronze_bucket" {
 module "silver_bucket" {
   source = "./modules/adls_bucket"
 
-  resource_group_name        = data.azurerm_resource_group.this.name
-  security_group_id          = var.security_group_id
-  azure_storage_account_kind = var.azure_storage_account_kind
-  bucket_name                = var.silver_bucket_name
-  container_name             = "${var.silver_bucket_name}-container"
-  key_vault_id               = module.azure_key_vault.key_vault_id
-  key_name                   = module.azure_key_vault.key_name
+  resource_group_name                    = data.azurerm_resource_group.this.name
+  security_group_id                      = var.security_group_id
+  azure_storage_account_kind             = var.azure_storage_account_kind
+  azure_storage_account_tier             = var.azure_storage_account_tier
+  azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  bucket_name                            = var.silver_bucket_name
+  container_name                         = "${var.silver_bucket_name}-container"
+  key_vault_id                           = module.azure_key_vault.key_vault_id
+  key_name                               = module.azure_key_vault.key_name
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
@@ -110,13 +114,15 @@ module "silver_bucket" {
 module "gold_bucket" {
   source = "./modules/adls_bucket"
 
-  resource_group_name        = data.azurerm_resource_group.this.name
-  security_group_id          = var.security_group_id
-  azure_storage_account_kind = var.azure_storage_account_kind
-  bucket_name                = var.gold_bucket_name
-  container_name             = "${var.gold_bucket_name}-container"
-  key_vault_id               = module.azure_key_vault.key_vault_id
-  key_name                   = module.azure_key_vault.key_name
+  resource_group_name                    = data.azurerm_resource_group.this.name
+  security_group_id                      = var.security_group_id
+  azure_storage_account_kind             = var.azure_storage_account_kind
+  azure_storage_account_tier             = var.azure_storage_account_tier
+  azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  bucket_name                            = var.gold_bucket_name
+  container_name                         = "${var.gold_bucket_name}-container"
+  key_vault_id                           = module.azure_key_vault.key_vault_id
+  key_name                               = module.azure_key_vault.key_name
 
   providers = {
     azurerm.auth_session = azurerm.auth_session

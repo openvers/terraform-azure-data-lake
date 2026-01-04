@@ -38,8 +38,8 @@ resource "azurerm_storage_account" "this" {
   resource_group_name      = data.azurerm_resource_group.this.name
   location                 = data.azurerm_resource_group.this.location
   account_kind             = var.azure_storage_account_kind
-  account_tier             = "Premium"
-  account_replication_type = "LRS"
+  account_tier             = var.azure_storage_account_tier
+  account_replication_type = var.azure_storage_account_replication_type
   is_hns_enabled           = var.hierarchical_namespace
 
   identity {
