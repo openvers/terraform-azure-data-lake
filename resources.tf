@@ -60,7 +60,7 @@ module "bronze_bucket" {
   bucket_name                            = var.bronze_bucket_name
   container_name                         = "${var.bronze_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
-  key_name                               = module.azure_key_vault.key_name
+  key_vault_key_id                       = module.azure_key_vault.key_id
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
@@ -91,7 +91,7 @@ module "silver_bucket" {
   bucket_name                            = var.silver_bucket_name
   container_name                         = "${var.silver_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
-  key_name                               = module.azure_key_vault.key_name
+  key_vault_key_id                       = module.azure_key_vault.key_id
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
@@ -122,7 +122,7 @@ module "gold_bucket" {
   bucket_name                            = var.gold_bucket_name
   container_name                         = "${var.gold_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
-  key_name                               = module.azure_key_vault.key_name
+  key_vault_key_id                       = module.azure_key_vault.key_id
 
   providers = {
     azurerm.auth_session = azurerm.auth_session

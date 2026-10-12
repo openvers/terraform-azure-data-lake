@@ -28,9 +28,9 @@ variable "key_vault_id" {
   description = "The ID of the Key Vault to use for customer-managed encryption."
 }
 
-variable "key_name" {
+variable "key_vault_key_id" {
   type        = string
-  description = "The name of the Key Vault Key to use for customer-managed encryption."
+  description = "The name of the Key Vault Key ID to use for customer-managed encryption."
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ variable "key_permissions" {
   default = [
     "Get",
     "UnwrapKey",
-    "WrapKey"
+    "WrapKey",
+    "GetRotationPolicy"
   ]
 }

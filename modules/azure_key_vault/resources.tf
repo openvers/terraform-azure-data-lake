@@ -9,10 +9,14 @@ terraform {
   }
 }
 
-data "azurerm_client_config" "this" {}
+data "azurerm_client_config" "this" {
+  provider = azurerm.auth_session
+}
 
 data "azurerm_resource_group" "this" {
-  name = var.resource_group_name
+  provider = azurerm.auth_session
+
+  name     = var.resource_group_name
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -40,6 +44,7 @@ resource "azurerm_key_vault" "this" {
   enabled_for_disk_encryption = var.enable_for_disk_encryption
   soft_delete_retention_days  = var.soft_delete_retention_days
   purge_protection_enabled    = var.purge_protection_enabled
+  rbac_authorization_enabled  = var.rbac_authorization_enabled
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
