@@ -25,7 +25,8 @@ terraform {
 ## Azure Active Directory (AzureAD) provider authenticated with CLI.
 ##---------------------------------------------------------------------------------------------------------------------
 provider "azuread" {
-  alias = "tokengen"
+  alias   = "tokengen"
+  use_cli = false
 }
 
 ##---------------------------------------------------------------------------------------------------------------------
@@ -36,6 +37,7 @@ provider "azuread" {
 provider "azurerm" {
   alias = "tokengen"
   features {}
+  use_cli = false
 }
 
 data "azuread_application_published_app_ids" "this" {
@@ -49,11 +51,11 @@ data "azuread_service_principal" "msgraph" {
 locals {
   oidc_subject = [
     {
-      display_name = "example-federated-idp-dataflow-readwrite"
+      display_name = "example-federated-idp-datalake-readwrite"
       subject      = "repo:${var.GITHUB_REPOSITORY}:environment:${var.GITHUB_ENV}"
     },
     {
-      display_name = "example-federated-idp-dataflow-read"
+      display_name = "example-federated-idp-datalake-read"
       subject      = "repo:${var.GITHUB_REPOSITORY}:ref:${var.GITHUB_REF}"
     }
   ]
@@ -100,7 +102,7 @@ data "azurerm_client_config" "current" {
 ## - `security_group_name`: The name of the security group.
 ##---------------------------------------------------------------------------------------------------------------------
 module "azure_service_account" {
-  source     = "github.com/sim-parables/terraform-azure-service-account.git?ref=5dcf3adf26ed12badcfd43f4b2f87e4d402c0c18"
+  source     = "github.com/openvers/terraform-azure-service-account.git?ref=0ce8ac7ab9dead70fe944c0501f3e56bc9b55e70"
   depends_on = [data.azurerm_client_config.current]
 
   application_display_name = var.application_display_name
@@ -116,6 +118,8 @@ module "azure_service_account" {
     "Microsoft.Insights/*",
     "Microsoft.Web/serverfarms/*",
     "Microsoft.KeyVault/vaults/*",
+    "Microsoft.KeyVault/locations/*",
+    "Microsoft.KeyVault/operations/*"
   ]
 
   application_app_roles = local.app_roles

@@ -28,9 +28,9 @@ variable "key_vault_id" {
   description = "The ID of the Key Vault to use for customer-managed encryption."
 }
 
-variable "key_name" {
+variable "key_vault_key_id" {
   type        = string
-  description = "The name of the Key Vault Key to use for customer-managed encryption."
+  description = "The name of the Key Vault Key ID to use for customer-managed encryption."
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -42,6 +42,18 @@ variable "azure_storage_account_kind" {
   type        = string
   description = "Azure Storage Account Kind"
   default     = "StorageV2"
+}
+
+variable "azure_storage_account_tier" {
+  type        = string
+  description = "Azure Storage Account Tier"
+  default     = "Premium"
+}
+
+variable "azure_storage_account_replication_type" {
+  type        = string
+  description = "Azure Storage Account Replication Type"
+  default     = "LRS"
 }
 
 variable "role_definition_name" {
@@ -68,6 +80,7 @@ variable "key_permissions" {
   default = [
     "Get",
     "UnwrapKey",
-    "WrapKey"
+    "WrapKey",
+    "GetRotationPolicy"
   ]
 }

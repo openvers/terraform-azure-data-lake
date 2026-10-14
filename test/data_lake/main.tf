@@ -38,6 +38,7 @@ locals {
 
 provider "azurerm" {
   features {}
+  use_cli = false
 }
 
 ##---------------------------------------------------------------------------------------------------------------------
@@ -53,7 +54,8 @@ provider "azurerm" {
 ## - `prevent_deletion_if_contains_resources`: Disable resource loss prevention mechanism.
 ##---------------------------------------------------------------------------------------------------------------------
 provider "azurerm" {
-  alias = "auth_session"
+  alias   = "auth_session"
+  use_cli = false
 
   features {
     resource_group {
@@ -178,11 +180,11 @@ EOT
 ## - `source`: The local file to upload.
 ## ---------------------------------------------------------------------------------------------------------------------
 resource "azurerm_storage_blob" "bronze_test_upload" {
-  provider = azurerm.auth_session
+  provider   = azurerm.auth_session
+  depends_on = [module.data_lake]
 
-  name                   = "test/sample_bronze_upload.txt"
-  storage_account_name   = module.data_lake.bronze_bucket_name
-  storage_container_name = module.data_lake.bronze_bucket_container_name
-  type                   = "Block"
-  source                 = local_file.bronze_sample.filename
+  name                 = "test/sample_bronze_upload.txt"
+  storage_container_id = module.data_lake.bronze_bucket_container_id
+  type                 = "Block"
+  source               = local_file.bronze_sample.filename
 }

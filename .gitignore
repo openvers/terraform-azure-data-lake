@@ -1,3 +1,13 @@
-.zed
-.terraform
+test/service_account/.terraform
+test/service_account/.terraform/*
+test/service_account/.terraform.lock.hcl
+test/data_lake/.terraform
+test/data_lake/.terraform/*
+test/data_lake/.terraform.lock.hcl
+test/data_lake/unit_test/__pycache__
 .terraform.lock.hcl
+.terraform
+test/data_lake/sample_bronze_upload.txt
+
+.zed
+.tmp

@@ -26,13 +26,13 @@ variable "security_group_name" {
 variable "GITHUB_REPOSITORY_OWNER" {
   type        = string
   description = "Github Actions Default ENV Variable for the Repo Owner"
-  default     = "sim-parables"
+  default     = "openvers"
 }
 
 variable "GITHUB_REPOSITORY" {
   type        = string
   description = "Github Actions Default ENV Variable for the Repo Path"
-  default     = "sim-parables/terraform-azure-blob-trigger"
+  default     = "openvers/terraform-azure-data-lake"
 }
 
 variable "GITHUB_REF" {

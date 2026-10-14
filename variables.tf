@@ -38,6 +38,18 @@ variable "gold_bucket_name" {
 ## These variables have defaults and may be overridden
 ## ---------------------------------------------------------------------------------------------------------------------
 
+variable "azure_storage_account_tier" {
+  type        = string
+  description = "Azure Storage Account Tier"
+  default     = "Premium"
+}
+
+variable "azure_storage_account_replication_type" {
+  type        = string
+  description = "Azure Storage Account Replication Type"
+  default     = "LRS"
+}
+
 variable "program_name" {
   type        = string
   description = "Program Name"

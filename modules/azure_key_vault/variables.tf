@@ -94,3 +94,9 @@ variable "encryption_key_options" {
     "wrapKey"
   ]
 }
+
+variable "rbac_authorization_enabled" {
+  type        = bool
+  description = "Role Base Access Control authorization flag"
+  default     = false
+}

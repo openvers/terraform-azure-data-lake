@@ -18,7 +18,7 @@ on:
           Working directory containing Terraform test scripts.
         required: false
         type: string
-        default: "./test"
+        default: "./test/data_lake"
     
     secrets:
       AZURE_CLIENT_ID:
@@ -50,12 +50,15 @@ jobs:
     
     defaults:
         run:
-          working-directory: ${{ inputs.working_directory }}
+          working-directory: "${{ inputs.working_directory }}"
     
     outputs:
-      INPUT_BUCKET_NAME: "${{ steps.tf-raw.outputs.INPUT_BUCKET_NAME }}"
-      OUTPUT_BUCKET_NAME: "${{ steps.tf-raw.outputs.OUTPUT_BUCKET_NAME }}"
-      FUNCTION_URL: "${{ steps.tf-raw.outputs.FUNCTION_URL }}"
+      BRONZE_BUCKET_NAME: "${{ steps.tf-raw.outputs.BRONZE_BUCKET_NAME }}"
+      BRONZE_BUCKET_CONTAINER_NAME: "${{ steps.tf-raw.outputs.BRONZE_BUCKET_CONTAINER_NAME }}"
+      SILVER_BUCKET_NAME: "${{ steps.tf-raw.outputs.SILVER_BUCKET_NAME }}"
+      SILVER_BUCKET_CONTAINER_NAME: "${{ steps.tf-raw.outputs.SILVER_BUCKET_CONTAINER_NAME }}"
+      GOLD_BUCKET_NAME: "${{ steps.tf-raw.outputs.GOLD_BUCKET_NAME }}"
+      GOLD_BUCKET_CONTAINER_NAME: "${{ steps.tf-raw.outputs.GOLD_BUCKET_CONTAINER_NAME }}"
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -75,9 +78,14 @@ jobs:
     - name: terraform raw output
       id: tf-raw
       run: |
-        echo "INPUT_BUCKET_NAME=$(terraform output -raw trigger_bucket_name)
-        OUTPUT_BUCKET_NAME=$(terraform output -raw results_bucket_name)
-        FUNCTION_URL=$(terraform output -raw function_url)" >> $GITHUB_OUTPUT
+        {
+          echo "BRONZE_BUCKET_NAME=$(terraform output -raw bronze_bucket_name)"
+          echo "BRONZE_BUCKET_CONTAINER_NAME=$(terraform output -raw bronze_bucket_container_name)"
+          echo "SILVER_BUCKET_NAME=$(terraform output -raw silver_bucket_name)"
+          echo "SILVER_BUCKET_CONTAINER_NAME=$(terraform output -raw silver_bucket_container_name)"
+          echo "GOLD_BUCKET_NAME=$(terraform output -raw gold_bucket_name)"
+          echo "GOLD_BUCKET_CONTAINER_NAME=$(terraform output -raw gold_bucket_container_name)"
+        } >> "$GITHUB_OUTPUT"
   
   terraform-test:
     name: Terraform Test
@@ -134,23 +142,20 @@ jobs:
       - name: Outputs Decode
         id: decode
         run: |
-          echo "INPUT_BUCKET_NAME=${{ needs.terraform-output.outputs.INPUT_BUCKET_NAME }}
-          OUTPUT_BUCKET_NAME=${{ needs.terraform-output.outputs.OUTPUT_BUCKET_NAME }}" >> $GITHUB_ENV
+          {
+            echo "BRONZE_BUCKET_NAME=${{ needs.terraform-output.outputs.BRONZE_BUCKET_NAME }}"
+            echo "BRONZE_BUCKET_CONTAINER_NAME=${{ needs.terraform-output.outputs.BRONZE_BUCKET_CONTAINER_NAME }}"
+            echo "SILVER_BUCKET_NAME=${{ needs.terraform-output.outputs.SILVER_BUCKET_NAME }}"
+            echo "SILVER_BUCKET_CONTAINER_NAME=${{ needs.terraform-output.outputs.SILVER_BUCKET_CONTAINER_NAME }}"
+            echo "GOLD_BUCKET_NAME=${{ needs.terraform-output.outputs.GOLD_BUCKET_NAME }}"
+            echo "GOLD_BUCKET_CONTAINER_NAME=${{ needs.terraform-output.outputs.GOLD_BUCKET_CONTAINER_NAME }}"
+          } >> "$GITHUB_ENV"
       
       # Install pip and pytest
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest adlfs fsspec uuid azure-identity
-      
-      - name: Wait for Function Availability
-        uses: emilioschepis/wait-for-endpoint@v1.0.3
-        with:
-          url: ${{ needs.terraform-output.outputs.FUNCTION_URL }}
-          method: GET
-          expected-status: 200
-          timeout:  600000
-          interval: 5000
       
       - name: Test with pytest
         run: |
@@ -160,7 +165,7 @@ jobs:
               
       - name: Upload pytest test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-results
-          path: junit/test-results.xml
+          path: ${{ inputs.working_directory }}/unit_test/junit/test-results.xml

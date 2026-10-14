@@ -9,10 +9,14 @@ terraform {
   }
 }
 
-data "azurerm_client_config" "this" {}
+data "azurerm_client_config" "this" {
+  provider = azurerm.auth_session
+}
 
 data "azurerm_resource_group" "this" {
-  name = var.resource_group_name
+  provider = azurerm.auth_session
+
+  name     = var.resource_group_name
 }
 
 
@@ -38,8 +42,8 @@ resource "azurerm_storage_account" "this" {
   resource_group_name      = data.azurerm_resource_group.this.name
   location                 = data.azurerm_resource_group.this.location
   account_kind             = var.azure_storage_account_kind
-  account_tier             = "Premium"
-  account_replication_type = "LRS"
+  account_tier             = var.azure_storage_account_tier
+  account_replication_type = var.azure_storage_account_replication_type
   is_hns_enabled           = var.hierarchical_namespace
 
   identity {
@@ -68,13 +72,31 @@ resource "azurerm_storage_account" "this" {
 ## - `role_definition_name`: Azure AD role name.
 ## - `principal_id`: Azure AD security group.
 ## ---------------------------------------------------------------------------------------------------------------------
-resource "azurerm_role_assignment" "this" {
+resource "azurerm_role_assignment" "storage_account_key_vault" {
   provider = azurerm.auth_session
 
   scope                            = azurerm_storage_account.this.id
   role_definition_name             = "Key Vault Crypto Service Encryption User"
   principal_id                     = azurerm_storage_account.this.identity[0].principal_id
   skip_service_principal_aad_check = true
+}
+
+## ---------------------------------------------------------------------------------------------------------------------
+## AZURERM ROLE ASSIGNMENT RESOURCE
+##
+## Assign Security Group access to ADLS Storage Account to contibute blob content.
+##
+## Parameters:
+## - `scope`: ADLS bucket ID.
+## - `role_definition_name`: Azure AD role name.
+## - `principal_id`: Azure AD security group.
+## ---------------------------------------------------------------------------------------------------------------------
+resource "azurerm_role_assignment" "storage_account_contributor" {
+  provider = azurerm.auth_session
+
+  scope                            = azurerm_storage_account.this.id
+  role_definition_name             = "Storage Blob Data Contributor"
+  principal_id                     = var.security_group_id
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -127,14 +149,12 @@ resource "azurerm_key_vault_access_policy" "this" {
 ## - `key_vault_id`: ID of the Key Vault.
 ## - `key_name`: Name of the key.
 ## ---------------------------------------------------------------------------------------------------------------------
-resource "azurerm_storage_account_customer_managed_key" "provider" {
+resource "azurerm_storage_account_customer_managed_key" "this" {
   provider = azurerm.auth_session
   depends_on = [
-    azurerm_role_assignment.this,
     azurerm_key_vault_access_policy.this,
   ]
 
   storage_account_id = azurerm_storage_account.this.id
-  key_vault_id       = var.key_vault_id
-  key_name           = var.key_name
+  key_vault_key_id   = var.key_vault_key_id
 }
