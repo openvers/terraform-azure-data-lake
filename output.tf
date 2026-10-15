@@ -13,6 +13,11 @@ output "azure_key_vault_key" {
   value       = module.azure_key_vault.key_name
 }
 
+output "azure_key_vault_key_id" {
+  description = "Azure Key Vault Key"
+  value       = module.azure_key_vault.key_id
+}
+
 output "bronze_bucket_id" {
   description = "Azure Medallion Bronze Storage Bucket ID"
   value       = module.bronze_bucket.bucket_id
