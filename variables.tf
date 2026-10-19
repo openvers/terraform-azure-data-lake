@@ -68,6 +68,12 @@ variable "azure_storage_account_kind" {
   default     = "StorageV2"
 }
 
+variable "azure_storage_hierarchical_namespace" {
+  type        = bool
+  description = "Flag to enable Azure Storage Account Hierarchical Namespace"
+  default     = false
+}
+
 variable "secret_permissions" {
   type        = list(string)
   description = "List of secret permissions to assign to the Key Vault"

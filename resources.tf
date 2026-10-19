@@ -57,6 +57,7 @@ module "bronze_bucket" {
   azure_storage_account_kind             = var.azure_storage_account_kind
   azure_storage_account_tier             = var.azure_storage_account_tier
   azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  hierarchical_namespace                 = var.azure_storage_hierarchical_namespace
   bucket_name                            = var.bronze_bucket_name
   container_name                         = "${var.bronze_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
@@ -88,6 +89,7 @@ module "silver_bucket" {
   azure_storage_account_kind             = var.azure_storage_account_kind
   azure_storage_account_tier             = var.azure_storage_account_tier
   azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  hierarchical_namespace                 = var.azure_storage_hierarchical_namespace
   bucket_name                            = var.silver_bucket_name
   container_name                         = "${var.silver_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
@@ -119,6 +121,7 @@ module "gold_bucket" {
   azure_storage_account_kind             = var.azure_storage_account_kind
   azure_storage_account_tier             = var.azure_storage_account_tier
   azure_storage_account_replication_type = var.azure_storage_account_replication_type
+  hierarchical_namespace                 = var.azure_storage_hierarchical_namespace
   bucket_name                            = var.gold_bucket_name
   container_name                         = "${var.gold_bucket_name}-container"
   key_vault_id                           = module.azure_key_vault.key_vault_id
