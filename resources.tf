@@ -22,12 +22,14 @@ data "azurerm_resource_group" "this" {
 ## - `resource_group_location`: Azure Resource Group location.
 ## - `resource_group_name`: Azure Resource Group name.
 ## - `key_vault_name`: Azure Key Vault name.
+## - `secret_permissions`: Secret permissions granted to the Terraform caller by the existing vault access policy.
 ## ---------------------------------------------------------------------------------------------------------------------
 module "azure_key_vault" {
   source = "./modules/azure_key_vault"
 
   resource_group_name = data.azurerm_resource_group.this.name
   key_vault_name      = var.key_vault_name
+  secret_permissions  = var.secret_permissions
 
   providers = {
     azurerm.auth_session = azurerm.auth_session
